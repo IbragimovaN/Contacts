@@ -1,26 +1,25 @@
+import { ContactDto } from "src/types/dto/ContactDto";
 import { ACTIONS_LIST } from "../actions/actions";
 import { SetContactsAction } from "../actions/types";
 
-const initialContactsState = {
+export interface InitialContactsState {
+  contactsArr: ContactDto[] | [];
+}
+const initialContactsState: InitialContactsState = {
   contactsArr: [],
-  currentContact: {},
 };
 
 export const contactsReducer = (
   state = initialContactsState,
   action: SetContactsAction
-) => {
+): InitialContactsState => {
   switch (action.type) {
     case ACTIONS_LIST.SET_CONTACTS_ACTION:
       return {
         ...state,
         contactsArr: [...action.payload],
       };
-    case ACTIONS_LIST.SET_CURRENT_CONTACT_ACTION:
-      return {
-        ...state,
-        currentContact: action.payload,
-      };
+
     default:
       return state;
   }

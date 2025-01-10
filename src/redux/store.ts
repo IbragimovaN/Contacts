@@ -1,15 +1,21 @@
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import { thunk } from "redux-thunk";
 import {
-  legacy_createStore as createStore,
-  combineReducers,
-  applyMiddleware,
-} from "redux";
-import thunkMiddleware from "redux-thunk";
+  contactsReducer,
+  contactReducer,
+  groupsReducer,
+  groupReducer,
+  favouritesContactsReducer,
+} from "./reducers";
 
 const rootReducer = combineReducers({
-  // contacts: productsReducer,
-  // groups: orderReducer
+  contacts: contactsReducer,
+  groups: groupsReducer,
+  contact: contactReducer,
+  group: groupReducer,
+  favouriteContacts: favouritesContactsReducer,
 });
-
-export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
+console.log(typeof rootReducer);
+export const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export type RootState = ReturnType<typeof rootReducer>;

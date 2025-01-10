@@ -1,26 +1,26 @@
+import { GroupContactsDto } from "src/types/dto/GroupContactsDto";
 import { ACTIONS_LIST } from "../actions/actions";
-import { SetContactsAction } from "../actions/types";
+import { SetGroupsActione } from "../actions/types";
 
-const initialGroupssState = {
+export interface InitialGroupsState {
+  groupsArr: GroupContactsDto[] | [];
+}
+
+const initialGroupsState: InitialGroupsState = {
   groupsArr: [],
-  currentGroup: {},
 };
 
-export const contactsReducer = (
-  state = initialGroupssState,
-  action: SetContactsAction
-) => {
+export const groupsReducer = (
+  state = initialGroupsState,
+  action: SetGroupsActione
+): InitialGroupsState => {
   switch (action.type) {
     case ACTIONS_LIST.SET_GROUPS_ACTION:
       return {
         ...state,
         groupsArr: [...action.payload],
       };
-    case ACTIONS_LIST.SET_CURRENT_GROUP_ACTION:
-      return {
-        ...state,
-        currentGroup: action.payload,
-      };
+
     default:
       return state;
   }

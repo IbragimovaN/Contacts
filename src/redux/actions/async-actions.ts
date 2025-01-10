@@ -6,28 +6,21 @@ import {
   setCurrentGroupAction,
   setGroupsAction,
 } from "./actions";
-import { BASE_URL } from "src/constants/env";
+import { BASE_URL } from "src/constants/baseUrl";
 import { ContactDto } from "src/types/dto/ContactDto";
 import { GroupContactsDto } from "src/types/dto/GroupContactsDto";
 import { ActionsTypes } from "./types";
 
-// export const ASYNC_ACTIONS_LIST = {
-//   GET_CONTACTS_ACTION_ASYNC: "GET_CONTACTS_ACTION_ASYNC",
-//   GET_CURRENT_CONTACT_ACTION_ASYNC: "GET_CURRENT_CONTACT_ACTION_ASYNC",
-//   GET_GROUPS_ACTION_ASYNC: "GET_GROUPS_ACTION_ASYNC",
-//   GET_CURRENT_GROUP_ACTION_ASYNC: "GET_CURRENT_GROUP_ACTION_ASYNC",
-// };
-
 export const getContactsActionAsync =
-  (): ThunkAction<Promise<void>, RootState, unknown, ActionsTypes> =>
+  (): ThunkAction<Promise<ActionsTypes>, RootState, unknown, ActionsTypes> =>
   (dispatch) => {
-    return fetch(`${BASE_URL}/contacrs`)
+    return fetch(`${BASE_URL}/contacts`)
       .then((res) => res.json())
       .then((data) => dispatch(setContactsAction(data)));
   };
 
 export const getGroupsActionAsync =
-  (): ThunkAction<Promise<void>, RootState, unknown, ActionsTypes> =>
+  (): ThunkAction<Promise<ActionsTypes>, RootState, unknown, ActionsTypes> =>
   (dispatch) => {
     return fetch(`${BASE_URL}/groups`)
       .then((res) => res.json())
@@ -37,18 +30,18 @@ export const getGroupsActionAsync =
 export const getCurrentContactActionAsync =
   (
     id: ContactDto["id"]
-  ): ThunkAction<Promise<void>, RootState, unknown, ActionsTypes> =>
+  ): ThunkAction<Promise<ActionsTypes>, RootState, unknown, ActionsTypes> =>
   (dispatch) => {
-    return fetch(`${BASE_URL}/groups${id}`)
+    return fetch(`${BASE_URL}/contacts/${id}`)
       .then((res) => res.json())
       .then((data) => dispatch(setCurrentContactAction(data)));
   };
 export const getCurrentGroupActionAsync =
   (
     id: GroupContactsDto["id"]
-  ): ThunkAction<Promise<void>, RootState, unknown, ActionsTypes> =>
+  ): ThunkAction<Promise<ActionsTypes>, RootState, unknown, ActionsTypes> =>
   (dispatch) => {
-    return fetch(`${BASE_URL}/groups${id}`)
+    return fetch(`${BASE_URL}/groups/${id}`)
       .then((res) => res.json())
       .then((data) => dispatch(setCurrentGroupAction(data)));
   };

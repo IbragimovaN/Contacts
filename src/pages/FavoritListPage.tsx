@@ -1,17 +1,26 @@
-import React, {memo, useEffect, useState} from 'react';
-import {CommonPageProps} from './types';
-import {Col, Row} from 'react-bootstrap';
-import {ContactCard} from 'src/components/ContactCard';
-import {ContactDto} from 'src/types/dto/ContactDto';
+import { memo, useEffect } from "react";
 
-export const FavoritListPage = memo<CommonPageProps>(({
-  favoriteContactsState,
-  contactsState
-}) => {
-  const [contacts, setContacts] = useState<ContactDto[]>([])
+import { Col, Row } from "react-bootstrap";
+import { ContactCard } from "src/components/ContactCard";
+import { ContactDto } from "src/types/dto/ContactDto";
+import { setContactsAction } from "src/redux/actions/actions";
+import { useAppDispatch, useAppSelector } from "src/redux/hooks";
+
+export const FavoritListPage = memo(() => {
+  const dispatch = useAppDispatch();
+  const favouriteContacts = useAppSelector(
+    (state) => state.favouriteContacts.favoriteContactsStateIds
+  );
+  const contacts: ContactDto[] = useAppSelector(
+    (state) => state.contacts.contactsArr
+  );
   useEffect(() => {
-    setContacts(() => contactsState[0].filter(({id}) => favoriteContactsState[0].includes(id)));
-  }, [contactsState, favoriteContactsState])
+    dispatch(
+      setContactsAction(
+        contacts.filter(({ id }) => favouriteContacts.includes(id))
+      )
+    );
+  }, [contacts, favouriteContacts, dispatch]);
   return (
     <Row xxl={4} className="g-4">
       {contacts.map((contact) => (
@@ -21,4 +30,4 @@ export const FavoritListPage = memo<CommonPageProps>(({
       ))}
     </Row>
   );
-})
+});

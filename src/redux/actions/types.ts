@@ -21,8 +21,14 @@ export interface SetCurrentGroupAction {
   payload: GroupContactsDto;
 }
 
+export interface AddFavouritesContactAction {
+  type: typeof ACTIONS_LIST.ADD_FAVOURITES_CONTACTS_IDS;
+  payload: GroupContactsDto["id"];
+}
+
 export type ActionsTypes =
   | SetContactsAction
   | SetGroupsActione
   | SetCurrentContactAction
+  | AddFavouritesContactAction
   | SetCurrentGroupAction;
