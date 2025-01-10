@@ -1,4 +1,8 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import {
+  legacy_createStore as createStore,
+  combineReducers,
+  applyMiddleware,
+} from "redux";
 import { thunk } from "redux-thunk";
 import {
   contactsReducer,
@@ -16,6 +20,8 @@ const rootReducer = combineReducers({
   favouriteContacts: favouritesContactsReducer,
 });
 console.log(typeof rootReducer);
+
+// @ts-ignore
 export const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export type RootState = ReturnType<typeof rootReducer>;
