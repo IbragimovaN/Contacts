@@ -13,5 +13,5 @@ npm start
 ## Запуск json-server
 
 ```bash
-npx json-server db.json
+json-server --watch db.json --port 4000
 ```
