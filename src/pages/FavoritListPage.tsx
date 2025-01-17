@@ -1,26 +1,33 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { Col, Row } from "react-bootstrap";
+import { DATA_CONTACT } from "src/__data__";
 import { ContactCard } from "src/components/ContactCard";
+import { useGetContactsQuery } from "src/ducks/contacts";
 import { ContactDto } from "src/types/dto/ContactDto";
-import { setContactsAction } from "src/redux/actions/actions";
-import { useAppDispatch, useAppSelector } from "src/redux/hooks";
+import { FavoriteContactsDto } from "src/types/dto/FavoriteContactsDto";
 
 export const FavoritListPage = memo(() => {
-  const dispatch = useAppDispatch();
-  const favouriteContacts = useAppSelector(
-    (state) => state.favouriteContacts.favoriteContactsStateIds
-  );
-  const contacts: ContactDto[] = useAppSelector(
-    (state) => state.contacts.contactsArr
-  );
+  const [contacts, setContacts] = useState<ContactDto[]>([]);
+  const contactsData = useGetContactsQuery();
+
+  const favoriteContacts: FavoriteContactsDto = [
+    DATA_CONTACT[0].id,
+    DATA_CONTACT[1].id,
+    DATA_CONTACT[2].id,
+    DATA_CONTACT[3].id,
+  ];
+
   useEffect(() => {
-    dispatch(
-      setContactsAction(
-        contacts.filter(({ id }) => favouriteContacts.includes(id))
-      )
-    );
-  }, [contacts, favouriteContacts, dispatch]);
+    const contactsArr: ContactDto[] = contactsData.isSuccess
+      ? contactsData.data
+      : [];
+    if (contactsArr) {
+      setContacts(
+        contactsArr.filter(({ id }) => favoriteContacts.includes(id))
+      );
+    }
+  }, [contactsData]);
   return (
     <Row xxl={4} className="g-4">
       {contacts.map((contact) => (

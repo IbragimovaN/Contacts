@@ -1,30 +1,30 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { ContactCard } from "src/components/ContactCard";
 import { FilterForm, FilterFormValues } from "src/components/FilterForm";
 import { ContactDto } from "src/types/dto/ContactDto";
-import { useAppDispatch, useAppSelector } from "src/redux/hooks";
-import {
-  getContactsActionAsync,
-  getGroupsActionAsync,
-} from "src/redux/actions/async-actions";
 
 import { GroupContactsDto } from "src/types/dto/GroupContactsDto";
-import { setContactsAction } from "src/redux/actions/actions";
+
+import { useGetContactsQuery } from "src/ducks/contacts";
+import { useGetGroupsQuery } from "src/ducks/groups";
 
 export const ContactListPage = memo(() => {
-  const dispatch = useAppDispatch();
-  const contacts: ContactDto[] = useAppSelector(
-    (state) => state.contacts.contactsArr
-  );
-  const groups: GroupContactsDto[] = useAppSelector(
-    (state) => state.groups.groupsArr
-  );
+  const [contacts, setContacts] = useState<ContactDto[]>([]);
+  const groupsData = useGetGroupsQuery();
+  const groups: GroupContactsDto[] = groupsData.isSuccess
+    ? groupsData.data
+    : [];
+  const contactsData = useGetContactsQuery();
 
   useEffect(() => {
-    dispatch(getContactsActionAsync());
-    dispatch(getGroupsActionAsync());
-  }, [dispatch]);
+    const contactsArr: ContactDto[] = contactsData.isSuccess
+      ? contactsData.data
+      : [];
+    if (contactsData) {
+      setContacts(contactsArr);
+    }
+  }, [contactsData]);
 
   const onSubmit = (fv: Partial<FilterFormValues>) => {
     let findContacts: ContactDto[] = contacts;
@@ -45,8 +45,7 @@ export const ContactListPage = memo(() => {
         );
       }
     }
-
-    dispatch(setContactsAction(findContacts));
+    setContacts(findContacts);
   };
 
   return (

@@ -1,27 +1,18 @@
-import { memo, useEffect } from "react";
+import { memo } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Empty } from "src/components/Empty";
 import { ContactCard } from "src/components/ContactCard";
-import { useAppDispatch, useAppSelector } from "src/redux/hooks";
-import {
-  getContactsActionAsync,
-  getCurrentGroupActionAsync,
-} from "src/redux/actions/async-actions";
 import { GroupContactsCard } from "src/components/GroupContactsCard";
+import { useGetCurrentGroupQuery } from "src/ducks/groups";
+import { useGetContactsQuery } from "src/ducks/contacts";
 
 export const GroupPage = memo(() => {
-  const dispatch = useAppDispatch();
-  const currentGroup = useAppSelector((state) => state.group.currentGroup);
-  const contacts = useAppSelector((state) => state.contacts.contactsArr);
   const { groupId } = useParams<{ groupId: string }>();
-
-  useEffect(() => {
-    if (groupId) {
-      dispatch(getCurrentGroupActionAsync(groupId));
-      dispatch(getContactsActionAsync());
-    }
-  }, [groupId, dispatch]);
+  const currentGroupData = useGetCurrentGroupQuery(groupId || "");
+  const currentGroup = currentGroupData.data;
+  const contactsData = useGetContactsQuery();
+  const contacts = contactsData.data;
 
   return (
     <Row className="g-4">
