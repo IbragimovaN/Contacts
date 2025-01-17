@@ -11,6 +11,7 @@ import { useGetGroupsQuery } from "src/ducks/groups";
 
 export const ContactListPage = memo(() => {
   const [contacts, setContacts] = useState<ContactDto[]>([]);
+
   const groupsData = useGetGroupsQuery();
   const groups: GroupContactsDto[] = groupsData.isSuccess
     ? groupsData.data
@@ -27,7 +28,9 @@ export const ContactListPage = memo(() => {
   }, [contactsData]);
 
   const onSubmit = (fv: Partial<FilterFormValues>) => {
-    let findContacts: ContactDto[] = contacts;
+    let findContacts: ContactDto[] = contactsData.isSuccess
+      ? contactsData.data
+      : [];
 
     if (fv.name) {
       const fvName = fv.name.toLowerCase();
