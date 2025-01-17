@@ -1,26 +1,21 @@
-import React, {FC, useEffect, useState} from 'react';
-import {CommonPageProps} from './types';
-import {Col, Row} from 'react-bootstrap';
-import {useParams} from 'react-router-dom';
-import {ContactDto} from 'src/types/dto/ContactDto';
-import {ContactCard} from 'src/components/ContactCard';
-import {Empty} from 'src/components/Empty';
+import { useEffect, useState } from "react";
+import { Col, Row } from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import { ContactDto } from "src/types/dto/ContactDto";
+import { ContactCard } from "src/components/ContactCard";
+import { Empty } from "src/components/Empty";
+import { useGetCurrentContactQuery } from "src/ducks/contacts";
 
+export const ContactPage = () => {
+  const { contactId } = useParams<{ contactId: string }>();
 
-export const ContactPage: FC<CommonPageProps> = ({
-  contactsState
-}) => {
-  const {contactId} = useParams<{ contactId: string }>();
-  const [contact, setContact] = useState<ContactDto>();
-
-  useEffect(() => {
-    setContact(() => contactsState[0].find(({id}) => id === contactId));
-  }, [contactId]);
+  const currentContactData = useGetCurrentContactQuery(contactId || "");
+  const contact = currentContactData.data;
 
   return (
     <Row xxl={3}>
-      <Col className={'mx-auto'}>
-        {contact ? <ContactCard contact={contact} /> : <Empty />}
+      <Col className={"mx-auto"}>
+        {contact ? <ContactCard contact={contact as ContactDto} /> : <Empty />}
       </Col>
     </Row>
   );

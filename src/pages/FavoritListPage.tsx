@@ -1,17 +1,28 @@
-import React, {memo, useEffect, useState} from 'react';
-import {CommonPageProps} from './types';
-import {Col, Row} from 'react-bootstrap';
-import {ContactCard} from 'src/components/ContactCard';
-import {ContactDto} from 'src/types/dto/ContactDto';
+import { memo, useEffect, useState } from "react";
 
-export const FavoritListPage = memo<CommonPageProps>(({
-  favoriteContactsState,
-  contactsState
-}) => {
-  const [contacts, setContacts] = useState<ContactDto[]>([])
+import { Col, Row } from "react-bootstrap";
+import { DATA_CONTACT } from "src/__data__";
+import { ContactCard } from "src/components/ContactCard";
+import { useGetContactsQuery } from "src/ducks/contacts";
+import { useAppSelector } from "src/ducks/contacts/hooks";
+import { ContactDto } from "src/types/dto/ContactDto";
+import { FavoriteContactsDto } from "src/types/dto/FavoriteContactsDto";
+
+export const FavoritListPage = memo(() => {
+  const [contacts, setContacts] = useState<ContactDto[]>([]);
+  const contactsData = useGetContactsQuery();
+  const favorites = useAppSelector(
+    (state) => state.favorites.favoritesContacts
+  );
+
   useEffect(() => {
-    setContacts(() => contactsState[0].filter(({id}) => favoriteContactsState[0].includes(id)));
-  }, [contactsState, favoriteContactsState])
+    const contactsArr: ContactDto[] = contactsData.isSuccess
+      ? contactsData.data
+      : [];
+    if (contactsArr) {
+      setContacts(contactsArr.filter(({ id }) => favorites.includes(id)));
+    }
+  }, [contactsData, favorites]);
   return (
     <Row xxl={4} className="g-4">
       {contacts.map((contact) => (
@@ -21,4 +32,4 @@ export const FavoritListPage = memo<CommonPageProps>(({
       ))}
     </Row>
   );
-})
+});
