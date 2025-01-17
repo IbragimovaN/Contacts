@@ -50,14 +50,14 @@ export const ContactListPage = memo(() => {
 
   return (
     <Row xxl={1}>
-      <Col className="mb-3">
-        <FilterForm
-          groupContactsList={groups}
-          initialValues={{}}
-          onSubmit={onSubmit}
-        />
-      </Col>
       <Col>
+        <Row>
+          <FilterForm
+            groupContactsList={groups}
+            initialValues={{}}
+            onSubmit={onSubmit}
+          />
+        </Row>
         <Row xxl={4} className="g-4">
           {contacts.map((contact) => (
             <Col key={contact.id}>
