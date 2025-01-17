@@ -4,10 +4,12 @@ import {
   contactsMiddleware,
   contactsReducer,
   contactsReducerPath,
+  favoritesReducer,
 } from "./contacts";
 import { groupMiddleware, groupReducer, groupReducerPath } from "./groups";
 
 const rootReducer = combineReducers({
+  favorites: favoritesReducer,
   [contactsReducerPath]: contactsReducer,
   [groupReducerPath]: groupReducer,
 });
