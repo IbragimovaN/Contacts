@@ -1,14 +1,14 @@
-import { memo } from "react";
+import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import { GroupContactsCard } from "src/components/GroupContactsCard";
-import { useGetGroupsQuery } from "src/ducks/groups";
-import { GroupContactsDto } from "src/types/dto/GroupContactsDto";
+import { observer } from "mobx-react-lite";
+import { groupsStore } from "src/store/groupsStore";
 
-export const GroupListPage = memo(() => {
-  const groupsData = useGetGroupsQuery();
-  const groups: GroupContactsDto[] = groupsData.isSuccess
-    ? groupsData.data
-    : [];
+export const GroupListPage = observer(() => {
+  const groups = groupsStore.groups;
+  useEffect(() => {
+    groupsStore.getGroupsArr();
+  }, []);
   return (
     <Row xxl={4}>
       {groups.map((groupContacts) => (

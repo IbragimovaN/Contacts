@@ -1,30 +1,25 @@
-import React, { memo } from "react";
 import { ContactDto } from "src/types/dto/ContactDto";
 import { Card, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addFavorite, removeFavorite } from "src/ducks/contacts";
 import { Heart, HeartFill } from "react-bootstrap-icons";
-import { useAppSelector } from "src/ducks/contacts/hooks";
+import { observer } from "mobx-react-lite";
+import { contactsStore } from "src/store/contactsStore";
 
 interface ContactCardProps {
   contact: ContactDto;
   withLink?: boolean;
 }
 
-export const ContactCard = memo<ContactCardProps>(
+export const ContactCard = observer<ContactCardProps>(
   ({ contact: { photo, id, name, phone, birthday, address }, withLink }) => {
-    const dispatch = useDispatch();
-    const favorites = useAppSelector(
-      (state) => state.favorites.favoritesContacts
-    );
+    const favorites = contactsStore.favoritesContacts;
     const isFavorite = favorites.includes(id);
 
     const handleFavoriteToggle = () => {
       if (isFavorite) {
-        dispatch(removeFavorite(id));
+        contactsStore.removeFavorite(id);
       } else {
-        dispatch(addFavorite(id));
+        contactsStore.addFavorite(id);
       }
     };
 

@@ -1,18 +1,23 @@
-import { memo } from "react";
+import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Empty } from "src/components/Empty";
 import { ContactCard } from "src/components/ContactCard";
 import { GroupContactsCard } from "src/components/GroupContactsCard";
-import { useGetCurrentGroupQuery } from "src/ducks/groups";
-import { useGetContactsQuery } from "src/ducks/contacts";
+import { observer } from "mobx-react-lite";
+import { groupsStore } from "src/store/groupsStore";
+import { contactsStore } from "src/store/contactsStore";
+import { GroupContactsDto } from "src/types/dto/GroupContactsDto";
 
-export const GroupPage = memo(() => {
+export const GroupPage = observer(() => {
   const { groupId } = useParams<{ groupId: string }>();
-  const currentGroupData = useGetCurrentGroupQuery(groupId || "");
-  const currentGroup = currentGroupData.data;
-  const contactsData = useGetContactsQuery();
-  const contacts = contactsData.data;
+  const currentGroup = groupsStore.currentGroup;
+  const contacts = contactsStore.contacts;
+
+  useEffect(() => {
+    groupsStore.getCurrentGroup(groupId || "");
+    contactsStore.getContactsArr();
+  }, [groupId]);
 
   return (
     <Row className="g-4">
@@ -21,7 +26,9 @@ export const GroupPage = memo(() => {
           <Col xxl={12}>
             <Row xxl={3}>
               <Col className="mx-auto">
-                <GroupContactsCard groupContacts={currentGroup} />
+                <GroupContactsCard
+                  groupContacts={currentGroup as GroupContactsDto}
+                />
               </Col>
             </Row>
           </Col>
