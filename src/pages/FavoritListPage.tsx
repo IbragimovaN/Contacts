@@ -1,24 +1,25 @@
-import React, {memo, useEffect, useState} from 'react';
-import {CommonPageProps} from './types';
-import {Col, Row} from 'react-bootstrap';
-import {ContactCard} from 'src/components/ContactCard';
-import {ContactDto} from 'src/types/dto/ContactDto';
+import { useEffect } from "react";
+import { Col, Row } from "react-bootstrap";
+import { ContactCard } from "src/components/ContactCard";
+import { observer } from "mobx-react-lite";
+import { contactsStore } from "src/store/contactsStore";
 
-export const FavoritListPage = memo<CommonPageProps>(({
-  favoriteContactsState,
-  contactsState
-}) => {
-  const [contacts, setContacts] = useState<ContactDto[]>([])
+export const FavoritListPage = observer(() => {
+  const contacts = contactsStore.contacts;
+  const favorites = contactsStore.favoritesContacts;
+
   useEffect(() => {
-    setContacts(() => contactsState[0].filter(({id}) => favoriteContactsState[0].includes(id)));
-  }, [contactsState, favoriteContactsState])
+    contactsStore.getContactsArr();
+  }, [favorites]);
   return (
     <Row xxl={4} className="g-4">
-      {contacts.map((contact) => (
-        <Col key={contact.id}>
-          <ContactCard contact={contact} withLink />
-        </Col>
-      ))}
+      {contacts
+        .filter(({ id }) => favorites.includes(id))
+        .map((contact) => (
+          <Col key={contact.id}>
+            <ContactCard contact={contact} withLink />
+          </Col>
+        ))}
     </Row>
   );
-})
+});

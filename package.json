@@ -13,6 +13,8 @@
     "axios": "1.4.0",
     "bootstrap": "5.2.3",
     "formik": "2.2.9",
+    "mobx": "6.13.5",
+    "mobx-react": "9.2.0",
     "react": "18.2.0",
     "react-bootstrap": "2.7.4",
     "react-dom": "18.2.0",
@@ -48,6 +50,9 @@
     ]
   },
   "dependencies": {
-    "contacts": "file:"
+    "@reduxjs/toolkit": "2.5.0",
+    "contacts": "file:",
+    "json-server": "1.0.0-beta.3",
+    "react-bootstrap-icons": "1.11.5"
   }
 }
