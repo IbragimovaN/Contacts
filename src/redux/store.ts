@@ -21,7 +21,10 @@ const rootReducer = combineReducers({
 });
 console.log(typeof rootReducer);
 
-// @ts-ignore
-export const store = createStore(rootReducer, applyMiddleware(thunk));
+export const store = createStore(
+  rootReducer,
+  undefined,
+  applyMiddleware(thunk)
+);
 
 export type RootState = ReturnType<typeof rootReducer>;
